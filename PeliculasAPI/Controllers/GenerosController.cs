@@ -12,7 +12,7 @@ namespace PeliculasAPI.Controllers
         [HttpGet] //api/generos
         [HttpGet("listado")] //api/generos/listado
         [HttpGet("/listado-generos")] //listado-generos
-
+        [OutputCache]
         public List<Genero> Get()
         {
             var repositorio = new RepositorioEnMemoria();
@@ -43,7 +43,7 @@ namespace PeliculasAPI.Controllers
         }
 
         [HttpPost]
-        public void Post()
+        public void Post(Genero genero)
         {
 
         }
