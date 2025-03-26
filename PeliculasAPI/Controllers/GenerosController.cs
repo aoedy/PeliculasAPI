@@ -7,15 +7,21 @@ using System.Threading.Tasks;
 namespace PeliculasAPI.Controllers
 {
     [Route("api/generos")]
+    [ApiController]
     public class GenerosController: ControllerBase
     {
+        private readonly IRepositorio repositorio;
+
+        public GenerosController(IRepositorio repositorio) 
+        {
+            this.repositorio = repositorio;
+        }  
         [HttpGet] //api/generos
         [HttpGet("listado")] //api/generos/listado
         [HttpGet("/listado-generos")] //listado-generos
         [OutputCache]
         public List<Genero> Get()
-        {
-            var repositorio = new RepositorioEnMemoria();
+        {            
             var generos = repositorio.ObtenerTodosLosGeneros();
             return generos;
         }
@@ -24,7 +30,6 @@ namespace PeliculasAPI.Controllers
         [OutputCache]
         public async Task<ActionResult<Genero>> Get(int id)
         {
-            var repositorio = new RepositorioEnMemoria();
             var genero =  await  repositorio.ObtenerPorId(id);
 
             if (genero is null)
@@ -37,15 +42,22 @@ namespace PeliculasAPI.Controllers
         [HttpGet("{nombre}")] //api/generos/Felipe
         public async Task<Genero?> Get(string nombre)
         {
-            var repositorio = new RepositorioEnMemoria();
             var genero = await repositorio.ObtenerPorId(1);
             return genero;
         }
 
         [HttpPost]
-        public void Post(Genero genero)
+        public IActionResult Post([FromBody] Genero genero)
         {
+            var repositorio = new RepositorioEnMemoria();
+            var yaExisteUnGeneroConDichoNombre = repositorio.Existe(genero.Nombre);
 
+            if (yaExisteUnGeneroConDichoNombre)
+            {
+                return BadRequest($"Ya existe un género con el nombre {genero.Nombre}"); 
+            }
+
+            return Ok();    
         }
 
         [HttpPut]
