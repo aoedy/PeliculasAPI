@@ -10,10 +10,5 @@ namespace PeliculasAPI.Entidades
         [StringLength(75)]
         public required string Nombre { get; set; }
         public required Point Ubicacion { get; set; }
-
-
-
-
-
     }
 }
