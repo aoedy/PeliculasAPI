@@ -1,6 +1,10 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using PeliculasAPI;
 using PeliculasAPI.Servicios;
+using PeliculasAPI.Utilidades;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +15,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSingleton(proveedor => new MapperConfiguration(configuracion =>
+{
+    var geometryFactory = proveedor.GetRequiredService<GeometryFactory>();
+    configuracion.AddProfile(new AutoMapperProfiles(geometryFactory));
+}).CreateMapper());
 
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
     opciones.UseSqlServer("name=DefaultConnection", sqlServer =>
     sqlServer.UseNetTopologySuite()));
+
+//ESTO ES PARA TRABAJAR CON CORDENADAS EN EL PALNETA TIERRA
+builder.Services.AddSingleton<GeometryFactory>(NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326));
 
 builder.Services.AddOutputCache(opciones =>
 {
