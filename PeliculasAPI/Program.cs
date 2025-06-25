@@ -44,7 +44,7 @@ builder.Services.AddCors(opciones =>
     });
 });
 
-builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

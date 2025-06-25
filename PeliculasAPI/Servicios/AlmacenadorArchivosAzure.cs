@@ -15,7 +15,7 @@ namespace PeliculasAPI.Servicios
         public async Task<string> Almacenar(string contenedor, IFormFile archivo)
         {
             var cliente = new BlobContainerClient(connectionString, contenedor);
-            await cliente.CreateIfNotExistsAsync();
+            Azure.Response<BlobContainerInfo> response = await cliente.CreateIfNotExistsAsync();
             cliente.SetAccessPolicy(PublicAccessType.Blob);
 
             var extension = Path.GetExtension(archivo.FileName);

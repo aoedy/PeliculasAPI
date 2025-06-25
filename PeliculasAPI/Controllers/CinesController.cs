@@ -17,7 +17,7 @@ namespace PeliculasAPI.Controllers
 
         public CinesController(ApplicationDbContext context, IMapper mapper,
             IOutputCacheStore outputCacheStore)
-            : base(context, mapper, outputCacheStore, cacheTag)  
+            :base(context, mapper, outputCacheStore, cacheTag)  
         {
             this.context = context;
             this.mapper = mapper;

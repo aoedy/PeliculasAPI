@@ -9,8 +9,23 @@ namespace PeliculasAPI
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<PeliculaActor>()
+                .HasKey(e => new { e.PeliculaId, e.ActorId });
+            modelBuilder.Entity<PeliculaCine>()
+                .HasKey(e => new { e.PeliculaId, e.CineId });
+            modelBuilder.Entity<PeliculaGenero>()
+                .HasKey(e => new {e.PeliculaId, e.GeneroId });
+        }
+
         public DbSet<Genero> Generos { get; set; }
         public DbSet<Actor> Actores { get; set; }
         public DbSet<Cine> Cines { get; set; }
+        public DbSet<Pelicula> Peliculas { get; set; }
+        public DbSet<PeliculaActor> PeliculasActores { get; set; }
+        public DbSet<PeliculaCine> PeliculasCines { get; set; }
+        public DbSet<PeliculaGenero> PeliculasGeneros { get; set; }
     }
 }
