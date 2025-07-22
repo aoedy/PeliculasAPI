@@ -13,11 +13,18 @@ namespace PeliculasAPI
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<PeliculaActor>()
-                .HasKey(e => new { e.PeliculaId, e.ActorId });
+            .HasKey(e => new { e.PeliculaId, e.ActorId });
             modelBuilder.Entity<PeliculaCine>()
-                .HasKey(e => new { e.PeliculaId, e.CineId });
+            .HasKey(e => new { e.PeliculaId, e.CineId });
             modelBuilder.Entity<PeliculaGenero>()
-                .HasKey(e => new {e.PeliculaId, e.GeneroId });
+            .HasKey(e => new {e.PeliculaId, e.GeneroId });
+
+            /*modelBuilder.Entity<PeliculaActor>()
+                .HasKey(e => new { e.ActorId, e.PeliculaId });
+            modelBuilder.Entity<PeliculaCine>()
+                .HasKey(e => new { e.CineId, e.PeliculaId });
+            modelBuilder.Entity<PeliculaGenero>()
+                .HasKey(e => new { e.GeneroId, e.PeliculaId });*/
         }
 
         public DbSet<Genero> Generos { get; set; }
