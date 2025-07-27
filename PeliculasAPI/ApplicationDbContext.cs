@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.Entidades;
 
 namespace PeliculasAPI
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {       
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -12,6 +13,7 @@ namespace PeliculasAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Configuración de las relaciones muchos a muchos
             modelBuilder.Entity<PeliculaActor>()
             .HasKey(e => new { e.PeliculaId, e.ActorId });
             modelBuilder.Entity<PeliculaCine>()
@@ -34,5 +36,6 @@ namespace PeliculasAPI
         public DbSet<PeliculaActor> PeliculasActores { get; set; }
         public DbSet<PeliculaCine> PeliculasCines { get; set; }
         public DbSet<PeliculaGenero> PeliculasGeneros { get; set; }
+        public DbSet<Rating> RatingsPeliculas { get; set; }
     }
 }

@@ -1,10 +1,13 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using PeliculasAPI;
 using PeliculasAPI.Servicios;
 using PeliculasAPI.Utilidades;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,34 @@ builder.Services.AddSingleton(proveedor => new MapperConfiguration(configuracion
     var geometryFactory = proveedor.GetRequiredService<GeometryFactory>();
     configuracion.AddProfile(new AutoMapperProfiles(geometryFactory));
 }).CreateMapper());
+
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserManager<IdentityUser>>();
+builder.Services.AddScoped<SignInManager<IdentityUser>>();
+
+builder.Services.AddAuthentication().AddJwtBearer(opciones =>
+{
+    opciones.MapInboundClaims = false; // Para que no se mapeen los claims de forma automática
+
+    opciones.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["llavejwt"]!)),
+        ClockSkew = TimeSpan.Zero // Para que no haya un desfase de tiempo al validar el token
+    };
+
+});
+
+builder.Services.AddAuthorization(opciones =>
+{
+    opciones.AddPolicy("esadmin", politica => politica.RequireClaim("esadmin"));
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
     opciones.UseSqlServer("name=DefaultConnection", sqlServer =>
@@ -46,6 +77,7 @@ builder.Services.AddCors(opciones =>
 
 builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 
 var app = builder.Build();
 

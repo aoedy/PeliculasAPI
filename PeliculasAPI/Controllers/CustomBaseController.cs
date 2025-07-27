@@ -93,8 +93,7 @@ namespace PeliculasAPI.Controllers
             await outputCacheStore.EvictByTagAsync(cacheTag, default);
 
             return NoContent();
-        }
-
+        }        
         protected async Task<IActionResult> Delete<TEntidad>(int id)
             where TEntidad: class, IId
         {
