@@ -81,11 +81,20 @@ builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-/*if (app.Environment.IsDevelopment())
+
+using (var scope = app.Services.CreateScope())
 {
-   
-}*/
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (dbContext.Database.IsRelational())
+    {
+        dbContext.Database.Migrate();
+    }
+}
+    // Configure the HTTP request pipeline.
+    /*if (app.Environment.IsDevelopment())
+    {
+
+    }*/
 
 app.UseSwagger();
 app.UseSwaggerUI();

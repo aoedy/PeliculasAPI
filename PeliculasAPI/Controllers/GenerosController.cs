@@ -44,6 +44,7 @@ namespace PeliculasAPI.Controllers
         [AllowAnonymous]
         public async Task<List<GeneroDTO>> Get()
         {
+            //throw new Exception("Se te olvido quitar esto");
             return await Get<Genero, GeneroDTO>(ordenarPor: g => g.Nombre);
         }
 

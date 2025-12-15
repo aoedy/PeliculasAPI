@@ -13,10 +13,9 @@
       "type": "storage",
       "connectionId": "ConnectionStrings:AzureStorageConnection"
     },
-    "mssql1": {
+    "mssql2": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:DefaultConnection1",
-      "dynamicId": null
+      "connectionId": "ConnectionStrings:DefaultConnection"
     }
   }
 }

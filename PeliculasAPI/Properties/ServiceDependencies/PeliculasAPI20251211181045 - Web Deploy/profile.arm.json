@@ -21,7 +21,7 @@
     },
     "resourceName": {
       "type": "string",
-      "defaultValue": "PeliculasAPI20251205203419",
+      "defaultValue": "PeliculasAPI20251211181045",
       "metadata": {
         "description": "Name of the main resource to be created by this template."
       }
